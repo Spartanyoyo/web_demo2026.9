@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  balance      Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  completions TaskCompletion[]
+  redemptions Redemption[]
+  ledger      LedgerEntry[]
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  reward      Int
+  category    String
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  completions TaskCompletion[]
+}
+
+model TaskCompletion {
+  id            String   @id @default(cuid())
+  userId        String
+  taskId        String
+  pointsAwarded Int
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task Task @relation(fields: [taskId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, taskId])
+  @@index([userId, createdAt])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  cost        Int
+  kind        String
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  redemptions Redemption[]
+}
+
+/// status: SUCCESS | FAILED | REJECTED
+/// FAILED = fulfillment failed, no debit
+/// REJECTED = business rule (insufficient balance etc.), no debit
+model Redemption {
+  id              String   @id @default(cuid())
+  userId          String
+  productId       String
+  idempotencyKey  String
+  pointsSpent     Int      @default(0)
+  status          String
+  failReason      String?
+  fulfillmentCode String?
+  createdAt       DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, idempotencyKey])
+  @@index([userId, createdAt])
+}
+
+/// direction: CREDIT | DEBIT
+model LedgerEntry {
+  id           String   @id @default(cuid())
+  userId       String
+  direction    String
+  amount       Int
+  balanceAfter Int
+  reason       String
+  refType      String
+  refId        String
+  note         String?
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}

@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f4f1ea;
+  --bg-elev: #fffdf8;
+  --ink: #1c1914;
+  --muted: #6b6458;
+  --line: #ddd4c4;
+  --gold: #8a6a2f;
+  --gold-soft: #efe3c6;
+  --good: #1f6b4a;
+  --good-soft: #e4f3eb;
+  --warn: #8a3d16;
+  --warn-soft: #f8e6d8;
+  --bad: #8f2d2d;
+  --bad-soft: #f8e2e2;
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --font-sans: "Iowan Old Style", "Palatino Linotype", Palatino, "Songti SC", "Noto Serif SC", serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  font-family: "Source Serif 4", "Iowan Old Style", "Songti SC", "Noto Serif SC", Georgia, serif;
+  background-image:
+    radial-gradient(ellipse at top, rgba(138, 106, 47, 0.07), transparent 42%),
+    linear-gradient(180deg, #f7f4ee 0%, #efe9dc 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.panel {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(28, 25, 20, 0.04);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.panel-hover:hover {
+  transform: translateY(-3px);
+  border-color: #cbb98a;
+  box-shadow:
+    0 10px 24px -12px rgba(138, 106, 47, 0.28),
+    0 1px 0 rgba(28, 25, 20, 0.04);
+}
+
+.panel-hover:active {
+  transform: translateY(-1px);
+}
+
+.mono {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.btn-ink {
+  background: var(--ink);
+  color: #fff;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.btn-ink:hover {
+  background: #3a342a;
+  box-shadow: 0 6px 16px -8px rgba(28, 25, 20, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-ink:active {
+  transform: translateY(0) scale(0.98);
+}
+
+::selection {
+  background: var(--gold-soft);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d8cdb4;
+  border: 2px solid var(--bg);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cbb98a;
+}
